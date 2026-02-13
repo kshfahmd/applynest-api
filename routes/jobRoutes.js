@@ -5,14 +5,17 @@ const {
   updateJob,
   deleteJob,
 } = require("../controllers/jobController");
-
 const protect = require("../middleware/authMiddleware");
-
+const validate = require("../middleware/validate");
+const {
+  createJobSchema,
+  updateJobSchema,
+} = require("../validators/jobValidator");
 const router = express.Router();
 
-router.post("/", protect, createJob);
+router.post("/", protect, validate(createJobSchema), createJob);
+router.put("/:id", protect, validate(updateJobSchema), updateJob);
 router.get("/", protect, getJobs);
-router.put("/:id", protect, updateJob);
 router.delete("/:id", protect, deleteJob);
 
 module.exports = router;
